@@ -73,6 +73,51 @@
                     <div class="full-flow-container">
                         <div class="flow-timeline">
 
+                            <!-- Fase: ENTRADA -->
+                            <div class="flow-phase-header">
+                                <div class="flow-phase-spacer"></div>
+                                <div class="flow-phase-content entrada">
+                                    <span>ENTRADA — Servicios Hospitalarios</span>
+                                    <div class="flow-phase-line"></div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 0: Servicios del Hospital (origen) -->
+                            <div class="flow-node">
+                                <div class="node-marker end-marker"><i class="fa-solid fa-hospital"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area end-area">Servicios del Hospital</span>
+                                    <h3>Generación y Envío del Material</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Instrumentadora / Enfermería del servicio de origen</div>
+                                        <div class="detail-item"><i class="fa-solid fa-map-pin"></i> <strong>Origen:</strong> Quirófano, UTI, UCI, Salas de internación, Guardia, Endoscopía</div>
+                                        <div class="detail-item">
+                                            <i class="fa-solid fa-list-check"></i>
+                                            <div>
+                                                <strong>Tareas:</strong>
+                                                <ul class="node-task-list">
+                                                    <li>Identificar el material usado o contaminado post-intervención</li>
+                                                    <li>Separar por tipo: cortante, articulado, textil, implante</li>
+                                                    <li>Retirar groseramente residuos visibles (sin sustituir la descontaminación)</li>
+                                                    <li>Colocar en contenedor cerrado o bolsa resistente identificada</li>
+                                                    <li>Rotular el contenedor: servicio de origen, fecha, tipo de material</li>
+                                                    <li>Transportar a la CEyE en carro cerrado diferenciado (no mezclar con material limpio)</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fase: PROCESO -->
+                            <div class="flow-phase-header">
+                                <div class="flow-phase-spacer"></div>
+                                <div class="flow-phase-content proceso">
+                                    <span>PROCESO — Sector Esterilización (CEyE)</span>
+                                    <div class="flow-phase-line"></div>
+                                </div>
+                            </div>
+
                             <!-- Nodo 1: Área Sucia -->
                             <div class="flow-node clickable" onclick="openArea('sucia')" title="Ver detalle: Área Sucia">
                                 <div class="node-marker sucia"><i class="fa-solid fa-sink"></i></div>
@@ -229,9 +274,18 @@
                                 </div>
                             </div>
 
+                            <!-- Fase: SALIDA -->
+                            <div class="flow-phase-header">
+                                <div class="flow-phase-spacer"></div>
+                                <div class="flow-phase-content salida">
+                                    <span>SALIDA — Distribución a Servicios</span>
+                                    <div class="flow-phase-line"></div>
+                                </div>
+                            </div>
+
                             <!-- Nodo 6: Distribución / Loop -->
                             <div class="flow-node loop-node">
-                                <div class="node-marker end-marker"><i class="fa-solid fa-arrows-spin"></i></div>
+                                <div class="node-marker end-marker"><i class="fa-solid fa-truck-medical"></i></div>
                                 <div class="node-content">
                                     <span class="node-area end-area">Servicios del Hospital</span>
                                     <h3>Distribución y Cierre del Ciclo</h3>

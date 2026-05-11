@@ -641,6 +641,51 @@ header p {
     font-weight: 700;
 }
 
+/* Flow Phase Headers */
+.flow-phase-header {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    margin: 1.5rem 0 0.5rem;
+}
+
+.flow-phase-spacer {
+    width: 80px;
+    min-width: 80px;
+}
+
+.flow-phase-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.flow-phase-content > span {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    white-space: nowrap;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    border: 1px solid var(--surface-border);
+    background: var(--bg-color);
+    color: var(--text-secondary);
+}
+
+.flow-phase-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--surface-border), transparent);
+}
+
+.flow-phase-content.entrada > span { color: #fca5a5; border-color: rgba(239, 68, 68, 0.3); }
+.flow-phase-content.proceso > span { color: #d8b4fe; border-color: rgba(139, 92, 246, 0.3); }
+.flow-phase-content.salida > span  { color: #bae6fd; border-color: rgba(56, 189, 248, 0.3); }
+
 /* Details panel spacing when outside view sections */
 .details-panel {
     margin-top: 2rem;
