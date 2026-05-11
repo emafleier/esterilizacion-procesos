@@ -141,16 +141,27 @@ function closeArea() {
 // --- Modo Edición ---
 function initContent() {
     let counter = 0;
+
+    function assignEid(el) {
+        if (!el.getAttribute('data-eid')) el.setAttribute('data-eid', `e${counter++}`);
+    }
+
+    // Elementos estáticos editables
     document.querySelectorAll(
-        '.flow-node h3, .node-task-list li, .node-alternative, ' +
+        'header h1, header > p, ' +
+        '.area-card h3, .area-card > p, .area-card .badge, ' +
+        '.flow-node h3, .flow-node .node-area, .flow-phase-content > span, ' +
+        '.node-task-list li, .node-alternative, ' +
         '.role-card h2, .task-list li, ' +
         '.gray-item h4, .gray-item p, .gray-proposal'
-    ).forEach(el => {
-        if (!el.getAttribute('data-eid')) {
-            el.setAttribute('data-eid', `e${counter++}`);
-        }
+    ).forEach(assignEid);
+
+    // Detail items (responsable, EPP, doc, origen) — excluir los que contienen lista de tareas
+    document.querySelectorAll('.flow-node .detail-item').forEach(el => {
+        if (!el.querySelector('.node-task-list')) assignEid(el);
     });
 
+    // Aplicar contenido guardado
     const saved = JSON.parse(localStorage.getItem('ceye-static') || '{}');
     Object.entries(saved).forEach(([eid, html]) => {
         const el = document.querySelector(`[data-eid="${eid}"]`);
