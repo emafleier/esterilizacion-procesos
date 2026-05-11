@@ -170,8 +170,10 @@ function initContent() {
 
     document.querySelectorAll(
         'header h1, header > p, ' +
-        '.map-station h3, .map-steps li, .map-station-alert, .map-station-footer, ' +
-        '.support-card strong, .support-card p, ' +
+        '.pmap-area h4, .pmap-area li, .pmap-area-alt, ' +
+        '.pmap-role strong, .pmap-role span, ' +
+        '.pmap-ext-node h4, .pmap-ext-node p, ' +
+        '.pmap-lane-h, .pmap-flow-tag, .pmap-return-path, ' +
         '.flow-node h3, .flow-node .node-area, .flow-phase-content > span, ' +
         '.node-task-list li, .node-alternative, ' +
         '.role-card h2, .task-list li, ' +
