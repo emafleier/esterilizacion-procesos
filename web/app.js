@@ -135,6 +135,7 @@ navItems.forEach(item => {
 
 // --- Detalles de Áreas ---
 function openArea(areaKey) {
+    if (editMode) return;
     const data = areaData[areaKey];
     if (data) {
         currentArea = areaKey;
