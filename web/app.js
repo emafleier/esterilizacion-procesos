@@ -170,7 +170,8 @@ function initContent() {
 
     document.querySelectorAll(
         'header h1, header > p, ' +
-        '.area-card h3, .area-card > p, .area-card .badge, ' +
+        '.map-station h3, .map-steps li, .map-station-alert, .map-station-footer, ' +
+        '.support-card strong, .support-card p, ' +
         '.flow-node h3, .flow-node .node-area, .flow-phase-content > span, ' +
         '.node-task-list li, .node-alternative, ' +
         '.role-card h2, .task-list li, ' +

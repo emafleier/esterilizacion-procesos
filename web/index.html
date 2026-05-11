@@ -50,33 +50,135 @@
             <div id="view-container">
                 <!-- View: Mapa de Procesos -->
                 <section id="view-mapa" class="view active">
-                    <div class="process-map">
-                        <div class="area-card sucia" onclick="openArea('sucia')">
-                            <div class="icon-wrapper"><i class="fa-solid fa-sink"></i></div>
-                            <h3>Área Sucia</h3>
-                            <p>Recepción y lavado</p>
-                            <span class="badge red">Contaminado</span>
+
+                    <!-- Flujo principal -->
+                    <div class="map-flow">
+
+                        <!-- Entrada -->
+                        <div class="map-station external-station">
+                            <div class="map-station-header">
+                                <div class="map-station-icon"><i class="fa-solid fa-hospital"></i></div>
+                                <span class="map-station-label">ENTRADA</span>
+                            </div>
+                            <h3>Servicios del Hospital</h3>
+                            <ul class="map-steps">
+                                <li>Quirófano / UTI / Salas</li>
+                                <li>Material usado post-intervención</li>
+                                <li>Clasificación y embalaje</li>
+                                <li>Transporte a CEyE en carro cerrado</li>
+                            </ul>
                         </div>
-                        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                        <div class="area-card gris" onclick="openArea('gris')">
-                            <div class="icon-wrapper"><i class="fa-solid fa-box-open"></i></div>
-                            <h3>Área Gris</h3>
-                            <p>Acondicionamiento y Empaque</p>
-                            <span class="badge yellow">Limpio</span>
+
+                        <div class="map-flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                        <!-- Área Sucia -->
+                        <div class="map-station process-station sucia" onclick="openArea('sucia')">
+                            <div class="map-station-header">
+                                <div class="map-station-icon"><i class="fa-solid fa-sink"></i></div>
+                                <span class="map-station-label">ÁREA SUCIA</span>
+                            </div>
+                            <h3>Recepción y Lavado</h3>
+                            <ul class="map-steps">
+                                <li>Recepción del material contaminado</li>
+                                <li>Lavado manual o ultrasónico</li>
+                                <li>Detergente enzimático</li>
+                                <li>Enjuague y secado completo</li>
+                            </ul>
+                            <div class="map-station-alert"><i class="fa-solid fa-triangle-exclamation"></i> Derrame → limpieza terminal inmediata</div>
+                            <div class="map-station-footer"><i class="fa-solid fa-user"></i> Mucama / Personal de limpieza</div>
                         </div>
-                        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
-                        <div class="area-card blanca" onclick="openArea('blanca')">
-                            <div class="icon-wrapper"><i class="fa-solid fa-temperature-arrow-up"></i></div>
-                            <h3>Área Blanca</h3>
-                            <p>Esterilización y Almacenaje</p>
-                            <span class="badge white">Estéril</span>
+
+                        <div class="map-flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                        <!-- Área Gris -->
+                        <div class="map-station process-station gris" onclick="openArea('gris')">
+                            <div class="map-station-header">
+                                <div class="map-station-icon"><i class="fa-solid fa-box-open"></i></div>
+                                <span class="map-station-label">ÁREA GRIS</span>
+                            </div>
+                            <h3>Acondicionamiento</h3>
+                            <ul class="map-steps">
+                                <li>Inspección visual con lupa</li>
+                                <li>Lubricación de articulaciones</li>
+                                <li>Armado de cajas y sets</li>
+                                <li>Empaque: papel grado médico / SMS</li>
+                                <li>Indicadores internos y externos</li>
+                                <li>Rotulado: lote, fecha, operador</li>
+                            </ul>
+                            <div class="map-station-alert"><i class="fa-solid fa-backward"></i> Defectuoso → retorna a Área Sucia</div>
+                            <div class="map-station-footer"><i class="fa-solid fa-user"></i> Técnico / Enfermero</div>
+                        </div>
+
+                        <div class="map-flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                        <!-- Área Blanca -->
+                        <div class="map-station process-station blanca" onclick="openArea('blanca')">
+                            <div class="map-station-header">
+                                <div class="map-station-icon"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                                <span class="map-station-label">ÁREA BLANCA</span>
+                            </div>
+                            <h3>Esterilización y Almacenaje</h3>
+                            <ul class="map-steps">
+                                <li>Carga del autoclave</li>
+                                <li>Ciclo vapor 121° / 134°C</li>
+                                <li>Monitoreo físico / químico / biológico</li>
+                                <li>Liberación supervisada (firma)</li>
+                                <li>Almacenaje FEFO en estanterías</li>
+                            </ul>
+                            <div class="map-station-alert"><i class="fa-solid fa-ban"></i> Falla → Cuarentena / Reproceso desde Área Gris</div>
+                            <div class="map-station-footer"><i class="fa-solid fa-user"></i> Técnico / Enfermero + Supervisor</div>
+                        </div>
+
+                        <div class="map-flow-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+
+                        <!-- Salida -->
+                        <div class="map-station external-station">
+                            <div class="map-station-header">
+                                <div class="map-station-icon"><i class="fa-solid fa-truck-medical"></i></div>
+                                <span class="map-station-label">SALIDA</span>
+                            </div>
+                            <h3>Distribución</h3>
+                            <ul class="map-steps">
+                                <li>Pedido de servicios</li>
+                                <li>Registro de trazabilidad</li>
+                                <li>Transporte en carros cerrados</li>
+                                <li>Uso clínico en servicios</li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!-- Retorno del ciclo -->
+                    <div class="map-return">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <span>Material usado retorna al Área Sucia — el ciclo es continuo</span>
+                    </div>
+
+                    <!-- Procesos de soporte -->
+                    <div class="map-support">
+                        <div class="support-card">
+                            <i class="fa-solid fa-broom"></i>
+                            <div>
+                                <strong>Limpieza Ambiental</strong>
+                                <p>Personal de limpieza · EPP específico por área · Mopas diferenciadas (roja / amarilla / blanca) · Limpieza al inicio, mitad y fin de turno + limpieza terminal programada</p>
+                            </div>
+                        </div>
+                        <div class="support-card">
+                            <i class="fa-solid fa-user-tie"></i>
+                            <div>
+                                <strong>Supervisión y Calidad</strong>
+                                <p>Liberación de cargas estériles · Auditorías internas · Control de indicadores biológicos · Gestión de trazabilidad y no conformidades</p>
+                            </div>
+                        </div>
+                        <div class="support-card">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <div>
+                                <strong>Registros y POE</strong>
+                                <p>POE-CE-02 (Área Gris) · POE-CE-03 (Área Blanca) · Planilla de armado · Registro de cargas · Registro de distribución · Check list limpieza</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="return-loop">
-                        <i class="fa-solid fa-arrow-rotate-left"></i>
-                        <span>El material distribuido retorna al Área Sucia como contaminado — el ciclo es continuo</span>
-                    </div>
                 </section>
 
                 <!-- View: Flujo Integral -->
