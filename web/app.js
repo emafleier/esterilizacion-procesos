@@ -93,6 +93,26 @@ const areaData = {
 // --- Estado ---
 let editMode = false;
 let currentArea = null;
+let permanentContent = {};
+
+const GITHUB_REPO = 'emafleier/esterilizacion-procesos';
+const CONTENT_FILE = 'web/content.json';
+
+// --- Inicialización ---
+async function init() {
+    await loadPermanentContent();
+    initContent();
+}
+
+async function loadPermanentContent() {
+    try {
+        const res = await fetch('./content.json?t=' + Date.now());
+        if (res.ok) {
+            const text = await res.text();
+            permanentContent = text.trim() ? JSON.parse(text) : {};
+        }
+    } catch(e) { /* content.json vacío o inexistente: usar defaults */ }
+}
 
 // --- Navegación del Sidebar ---
 const navItems = document.querySelectorAll('.nav-links li');
@@ -121,8 +141,9 @@ function openArea(areaKey) {
         detailTitle.innerHTML = data.title;
         detailTitle.style.color = data.color;
 
-        const savedPanel = localStorage.getItem(`ceye-panel-${areaKey}`);
-        detailContent.innerHTML = savedPanel || data.content;
+        const panelDraft     = localStorage.getItem(`ceye-panel-${areaKey}`);
+        const panelPermanent = permanentContent[`panel-${areaKey}`] || null;
+        detailContent.innerHTML = panelDraft || panelPermanent || data.content;
 
         if (editMode) enablePanelEditing(areaKey);
 
@@ -146,7 +167,6 @@ function initContent() {
         if (!el.getAttribute('data-eid')) el.setAttribute('data-eid', `e${counter++}`);
     }
 
-    // Elementos estáticos editables
     document.querySelectorAll(
         'header h1, header > p, ' +
         '.area-card h3, .area-card > p, .area-card .badge, ' +
@@ -156,14 +176,19 @@ function initContent() {
         '.gray-item h4, .gray-item p, .gray-proposal'
     ).forEach(assignEid);
 
-    // Detail items (responsable, EPP, doc, origen) — excluir los que contienen lista de tareas
     document.querySelectorAll('.flow-node .detail-item').forEach(el => {
         if (!el.querySelector('.node-task-list')) assignEid(el);
     });
 
-    // Aplicar contenido guardado
-    const saved = JSON.parse(localStorage.getItem('ceye-static') || '{}');
-    Object.entries(saved).forEach(([eid, html]) => {
+    // Aplicar contenido permanente primero, luego borradores locales
+    Object.entries(permanentContent).forEach(([eid, html]) => {
+        if (eid.startsWith('panel-')) return;
+        const el = document.querySelector(`[data-eid="${eid}"]`);
+        if (el) el.innerHTML = html;
+    });
+
+    const draft = JSON.parse(localStorage.getItem('ceye-static') || '{}');
+    Object.entries(draft).forEach(([eid, html]) => {
         const el = document.querySelector(`[data-eid="${eid}"]`);
         if (el) el.innerHTML = html;
     });
@@ -171,16 +196,14 @@ function initContent() {
 
 function toggleEditMode() {
     editMode = !editMode;
-    const btn = document.getElementById('btn-edit-toggle');
-    const hint = document.getElementById('edit-hint');
+    const btn     = document.getElementById('btn-edit-toggle');
+    const hint    = document.getElementById('edit-hint');
+    const saveBtn = document.getElementById('btn-save-github');
 
     document.querySelectorAll('[data-eid]').forEach(el => {
         el.contentEditable = editMode ? 'true' : 'false';
-        if (editMode) {
-            el.addEventListener('input', handleStaticEdit);
-        } else {
-            el.removeEventListener('input', handleStaticEdit);
-        }
+        if (editMode) el.addEventListener('input', handleStaticEdit);
+        else          el.removeEventListener('input', handleStaticEdit);
     });
 
     document.body.classList.toggle('edit-mode', editMode);
@@ -188,17 +211,19 @@ function toggleEditMode() {
     if (editMode) {
         btn.innerHTML = '<i class="fa-solid fa-eye"></i> Vista Normal';
         btn.classList.add('editing');
-        if (hint) hint.style.display = 'block';
+        if (hint)    hint.style.display    = 'block';
+        if (saveBtn) saveBtn.style.display = 'flex';
         if (currentArea) enablePanelEditing(currentArea);
     } else {
         btn.innerHTML = '<i class="fa-solid fa-pencil"></i> Editar Contenido';
         btn.classList.remove('editing');
-        if (hint) hint.style.display = 'none';
+        if (hint)    hint.style.display    = 'none';
+        if (saveBtn) saveBtn.style.display = 'none';
     }
 }
 
 function handleStaticEdit(e) {
-    const eid = e.currentTarget.getAttribute('data-eid');
+    const eid  = e.currentTarget.getAttribute('data-eid');
     const saved = JSON.parse(localStorage.getItem('ceye-static') || '{}');
     saved[eid] = e.currentTarget.innerHTML;
     localStorage.setItem('ceye-static', JSON.stringify(saved));
@@ -221,5 +246,91 @@ function resetContent() {
     }
 }
 
-// Inicializar contenido editable
-initContent();
+// --- Guardar en GitHub ---
+async function saveToGitHub() {
+    let token = localStorage.getItem('ceye-gh-token');
+    if (!token) {
+        token = prompt(
+            'Ingresá tu GitHub Token (con permiso "contents: write").\n\n' +
+            'Crealo en: github.com → Settings → Developer settings → Tokens (classic)'
+        );
+        if (!token) return;
+        token = token.trim();
+        localStorage.setItem('ceye-gh-token', token);
+    }
+
+    const saveBtn = document.getElementById('btn-save-github');
+    const original = saveBtn.innerHTML;
+    saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Guardando...';
+    saveBtn.disabled = true;
+
+    // Recolectar todo el contenido actual
+    const content = {};
+    document.querySelectorAll('[data-eid]').forEach(el => {
+        content[el.getAttribute('data-eid')] = el.innerHTML;
+    });
+    ['sucia', 'gris', 'blanca'].forEach(k => {
+        const panel = localStorage.getItem(`ceye-panel-${k}`);
+        if (panel) content[`panel-${k}`] = panel;
+    });
+
+    const newContent = JSON.stringify(content, null, 2);
+    const encoded    = btoa(unescape(encodeURIComponent(newContent)));
+
+    try {
+        // Obtener SHA actual del archivo
+        let sha = null;
+        const getRes = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/contents/${CONTENT_FILE}`,
+            { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } }
+        );
+        if (getRes.ok) sha = (await getRes.json()).sha;
+
+        const body = { message: 'content: actualizar textos desde editor web', content: encoded };
+        if (sha) body.sha = sha;
+
+        const putRes = await fetch(
+            `https://api.github.com/repos/${GITHUB_REPO}/contents/${CONTENT_FILE}`,
+            {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            }
+        );
+
+        if (putRes.ok) {
+            localStorage.removeItem('ceye-static');
+            ['sucia', 'gris', 'blanca'].forEach(k => localStorage.removeItem(`ceye-panel-${k}`));
+            showToast('✓ Guardado en GitHub — el sitio se actualizará en ~1 min', 'success');
+        } else {
+            const err = await putRes.json();
+            if (putRes.status === 401 || putRes.status === 403) {
+                localStorage.removeItem('ceye-gh-token');
+                showToast('Token inválido. Hacé clic en "Guardar" de nuevo para ingresar uno nuevo.', 'error');
+            } else {
+                showToast('Error al guardar: ' + (err.message || putRes.status), 'error');
+            }
+        }
+    } catch(e) {
+        showToast('Error de conexión: ' + e.message, 'error');
+    }
+
+    saveBtn.innerHTML = original;
+    saveBtn.disabled  = false;
+}
+
+function showToast(msg, type = 'success') {
+    const el = document.createElement('div');
+    el.className = `save-toast ${type}`;
+    el.innerHTML  = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.classList.add('visible'), 10);
+    setTimeout(() => { el.classList.remove('visible'); setTimeout(() => el.remove(), 400); }, 4000);
+}
+
+// Inicializar
+init();
