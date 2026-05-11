@@ -27,6 +27,16 @@
                 <li data-view="roles"><i class="fa-solid fa-users"></i> Roles y Tareas</li>
                 <li data-view="zonas-grises"><i class="fa-solid fa-circle-question"></i> Zonas Grises</li>
             </ul>
+
+            <div class="edit-toolbar">
+                <button id="btn-edit-toggle" onclick="toggleEditMode()">
+                    <i class="fa-solid fa-pencil"></i> Editar Contenido
+                </button>
+                <button id="btn-reset-content" onclick="resetContent()">
+                    <i class="fa-solid fa-rotate-left"></i> Deshacer todo
+                </button>
+                <p id="edit-hint">Hacé clic en cualquier texto resaltado para editarlo. Los cambios se guardan automáticamente.</p>
+            </div>
         </nav>
 
         <!-- Main Content Area -->

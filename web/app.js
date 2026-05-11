@@ -90,7 +90,11 @@ const areaData = {
     }
 };
 
-// Navegación del Sidebar
+// --- Estado ---
+let editMode = false;
+let currentArea = null;
+
+// --- Navegación del Sidebar ---
 const navItems = document.querySelectorAll('.nav-links li');
 const views = document.querySelectorAll('.view');
 const detailsPanel = document.getElementById('area-details');
@@ -99,42 +103,112 @@ const detailContent = document.getElementById('detail-content');
 
 navItems.forEach(item => {
     item.addEventListener('click', () => {
-        // Remover clase active de todos los items
         navItems.forEach(nav => nav.classList.remove('active'));
-        // Ocultar todas las vistas
-        views.forEach(view => view.classList.add('hidden'));
-        views.forEach(view => view.classList.remove('active'));
-        
-        // Activar item clickeado
+        views.forEach(view => { view.classList.add('hidden'); view.classList.remove('active'); });
         item.classList.add('active');
-        
-        // Mostrar vista correspondiente
         const targetView = item.getAttribute('data-view');
         document.getElementById('view-' + targetView).classList.remove('hidden');
         document.getElementById('view-' + targetView).classList.add('active');
-
-        // Si cambiamos de vista, cerramos el panel de detalles
         closeArea();
     });
 });
 
-// Lógica para abrir detalles de Áreas
+// --- Detalles de Áreas ---
 function openArea(areaKey) {
     const data = areaData[areaKey];
-    if(data) {
+    if (data) {
+        currentArea = areaKey;
         detailTitle.innerHTML = data.title;
         detailTitle.style.color = data.color;
-        detailContent.innerHTML = data.content;
-        
+
+        const savedPanel = localStorage.getItem(`ceye-panel-${areaKey}`);
+        detailContent.innerHTML = savedPanel || data.content;
+
+        if (editMode) enablePanelEditing(areaKey);
+
         detailsPanel.classList.remove('hidden');
-        // Scroll suave hacia los detalles
         setTimeout(() => {
             detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 50);
     }
 }
 
-// Lógica para cerrar detalles de Áreas
 function closeArea() {
     detailsPanel.classList.add('hidden');
+    currentArea = null;
 }
+
+// --- Modo Edición ---
+function initContent() {
+    let counter = 0;
+    document.querySelectorAll(
+        '.flow-node h3, .node-task-list li, .node-alternative, ' +
+        '.role-card h2, .task-list li, ' +
+        '.gray-item h4, .gray-item p, .gray-proposal'
+    ).forEach(el => {
+        if (!el.getAttribute('data-eid')) {
+            el.setAttribute('data-eid', `e${counter++}`);
+        }
+    });
+
+    const saved = JSON.parse(localStorage.getItem('ceye-static') || '{}');
+    Object.entries(saved).forEach(([eid, html]) => {
+        const el = document.querySelector(`[data-eid="${eid}"]`);
+        if (el) el.innerHTML = html;
+    });
+}
+
+function toggleEditMode() {
+    editMode = !editMode;
+    const btn = document.getElementById('btn-edit-toggle');
+    const hint = document.getElementById('edit-hint');
+
+    document.querySelectorAll('[data-eid]').forEach(el => {
+        el.contentEditable = editMode ? 'true' : 'false';
+        if (editMode) {
+            el.addEventListener('input', handleStaticEdit);
+        } else {
+            el.removeEventListener('input', handleStaticEdit);
+        }
+    });
+
+    document.body.classList.toggle('edit-mode', editMode);
+
+    if (editMode) {
+        btn.innerHTML = '<i class="fa-solid fa-eye"></i> Vista Normal';
+        btn.classList.add('editing');
+        if (hint) hint.style.display = 'block';
+        if (currentArea) enablePanelEditing(currentArea);
+    } else {
+        btn.innerHTML = '<i class="fa-solid fa-pencil"></i> Editar Contenido';
+        btn.classList.remove('editing');
+        if (hint) hint.style.display = 'none';
+    }
+}
+
+function handleStaticEdit(e) {
+    const eid = e.currentTarget.getAttribute('data-eid');
+    const saved = JSON.parse(localStorage.getItem('ceye-static') || '{}');
+    saved[eid] = e.currentTarget.innerHTML;
+    localStorage.setItem('ceye-static', JSON.stringify(saved));
+}
+
+function enablePanelEditing(areaKey) {
+    detailContent.querySelectorAll('h4, p').forEach(el => {
+        el.contentEditable = 'true';
+        el.addEventListener('input', () => {
+            localStorage.setItem(`ceye-panel-${areaKey}`, detailContent.innerHTML);
+        });
+    });
+}
+
+function resetContent() {
+    if (confirm('¿Resetear todos los cambios al contenido original?')) {
+        localStorage.removeItem('ceye-static');
+        ['sucia', 'gris', 'blanca'].forEach(k => localStorage.removeItem(`ceye-panel-${k}`));
+        location.reload();
+    }
+}
+
+// Inicializar contenido editable
+initContent();

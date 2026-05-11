@@ -686,6 +686,120 @@ header p {
 .flow-phase-content.proceso > span { color: #d8b4fe; border-color: rgba(139, 92, 246, 0.3); }
 .flow-phase-content.salida > span  { color: #bae6fd; border-color: rgba(56, 189, 248, 0.3); }
 
+/* ===== MODO EDICIÓN ===== */
+#btn-edit-toggle {
+    margin-top: auto;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--surface-border);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    width: 100%;
+    transition: var(--transition-fast);
+    font-family: 'Inter', sans-serif;
+}
+
+#btn-edit-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+#btn-edit-toggle.editing {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    box-shadow: 0 4px 15px var(--accent-glow);
+}
+
+#btn-reset-content {
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.08);
+    color: #fca5a5;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.82rem;
+    font-weight: 500;
+    width: 100%;
+    transition: var(--transition-fast);
+    font-family: 'Inter', sans-serif;
+    display: none;
+}
+
+#btn-reset-content:hover {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+.edit-toolbar {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--surface-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#edit-hint {
+    display: none;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    padding: 0.5rem 0.75rem;
+    background: rgba(139, 92, 246, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    line-height: 1.4;
+}
+
+body.edit-mode #btn-reset-content { display: flex; }
+
+/* Elementos editables en modo edición */
+body.edit-mode [data-eid] {
+    outline: 2px dashed rgba(139, 92, 246, 0.35);
+    outline-offset: 3px;
+    cursor: text;
+    border-radius: 4px;
+}
+
+body.edit-mode [data-eid]:hover {
+    outline-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.07);
+}
+
+body.edit-mode [data-eid]:focus {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 3px;
+    background: rgba(139, 92, 246, 0.1);
+}
+
+/* Panel de detalles en modo edición */
+body.edit-mode #detail-content h4,
+body.edit-mode #detail-content p {
+    outline: 2px dashed rgba(139, 92, 246, 0.35);
+    outline-offset: 3px;
+    border-radius: 4px;
+    cursor: text;
+}
+
+body.edit-mode #detail-content h4:hover,
+body.edit-mode #detail-content p:hover {
+    outline-color: var(--accent-color);
+    background: rgba(139, 92, 246, 0.07);
+}
+
+body.edit-mode #detail-content h4:focus,
+body.edit-mode #detail-content p:focus {
+    outline: 2px solid var(--accent-color);
+    background: rgba(139, 92, 246, 0.1);
+}
+
 /* Details panel spacing when outside view sections */
 .details-panel {
     margin-top: 2rem;
