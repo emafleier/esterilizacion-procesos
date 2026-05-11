@@ -2,3 +2,6 @@
 Thumbs.db
 desktop.ini
 
+# Credenciales — nunca subir al repositorio
+.env
+
