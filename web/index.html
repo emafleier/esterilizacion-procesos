@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Esterilización - Procesos Interactivos</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-hospital-user"></i>
+                <h2>CEyE Map</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active" data-view="mapa"><i class="fa-solid fa-map-location-dot"></i> Mapa de Procesos</li>
+                <li data-view="flujo-completo"><i class="fa-solid fa-route"></i> Flujo Integral</li>
+                <li data-view="roles"><i class="fa-solid fa-users"></i> Roles y Tareas</li>
+                <li data-view="zonas-grises"><i class="fa-solid fa-circle-question"></i> Zonas Grises</li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header>
+                <h1>Flujo Operativo de Esterilización</h1>
+                <p>Navega interactivamente por las áreas y procesos de la central.</p>
+            </header>
+
+            <div id="view-container">
+                <!-- View: Mapa de Procesos -->
+                <section id="view-mapa" class="view active">
+                    <div class="process-map">
+                        <div class="area-card sucia" onclick="openArea('sucia')">
+                            <div class="icon-wrapper"><i class="fa-solid fa-sink"></i></div>
+                            <h3>Área Sucia</h3>
+                            <p>Recepción y lavado</p>
+                            <span class="badge red">Contaminado</span>
+                        </div>
+                        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="area-card gris" onclick="openArea('gris')">
+                            <div class="icon-wrapper"><i class="fa-solid fa-box-open"></i></div>
+                            <h3>Área Gris</h3>
+                            <p>Acondicionamiento y Empaque</p>
+                            <span class="badge yellow">Limpio</span>
+                        </div>
+                        <div class="arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                        <div class="area-card blanca" onclick="openArea('blanca')">
+                            <div class="icon-wrapper"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                            <h3>Área Blanca</h3>
+                            <p>Esterilización y Almacenaje</p>
+                            <span class="badge white">Estéril</span>
+                        </div>
+                    </div>
+
+                    <div class="return-loop">
+                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <span>El material distribuido retorna al Área Sucia como contaminado — el ciclo es continuo</span>
+                    </div>
+                </section>
+
+                <!-- View: Flujo Integral -->
+                <section id="view-flujo-completo" class="view hidden">
+                    <div class="full-flow-container">
+                        <div class="flow-timeline">
+                            <!-- Nodo 1: Inicio / Sucia -->
+                            <div class="flow-node clickable" onclick="openArea('sucia')" title="Ver detalle: Área Sucia">
+                                <div class="node-marker sucia"><i class="fa-solid fa-sink"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area sucia">Área Sucia</span>
+                                    <h3>Recepción y Lavado</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Mucama / Personal Limpieza</div>
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Recibir material sucio, aplicar detergente enzimático, secar por completo.</div>
+                                        <div class="detail-item"><i class="fa-solid fa-file-contract"></i> <strong>Doc:</strong> POE Limpieza Central</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 2: Gris -->
+                            <div class="flow-node clickable" onclick="openArea('gris')" title="Ver detalle: Área Gris">
+                                <div class="node-marker gris"><i class="fa-solid fa-magnifying-glass"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area gris">Área Gris</span>
+                                    <h3>Inspección y Acondicionamiento</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Técnico / Enfermero</div>
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Revisión visual, lubricación, armado de cajas según listas.</div>
+                                        <div class="detail-item"><i class="fa-solid fa-file-contract"></i> <strong>Doc:</strong> POE-CE-02, Planilla de Armado</div>
+                                    </div>
+                                    <div class="node-alternative">
+                                        <i class="fa-solid fa-arrow-rotate-left"></i> <strong>Retorno:</strong> Si hay restos orgánicos, vuelve al Área Sucia.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 3: Gris a Blanca -->
+                            <div class="flow-node clickable" onclick="openArea('gris')" title="Ver detalle: Área Gris">
+                                <div class="node-marker gris"><i class="fa-solid fa-box"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area gris">Área Gris</span>
+                                    <h3>Empaque y Rotulado</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Técnico / Enfermero</div>
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Envoltura, colocación de indicadores (interno/externo), etiqueta de lote y vto.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 4: Blanca -->
+                            <div class="flow-node clickable" onclick="openArea('blanca')" title="Ver detalle: Área Blanca">
+                                <div class="node-marker blanca"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area blanca">Área Blanca</span>
+                                    <h3>Esterilización y Monitoreo</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Técnico / Enfermero</div>
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Cargar autoclave (Vapor 121°/134°). Monitoreo de controles biológicos y físicos.</div>
+                                        <div class="detail-item"><i class="fa-solid fa-file-contract"></i> <strong>Doc:</strong> POE-CE-03, Registro de Cargas</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 5: Blanca Liberación -->
+                            <div class="flow-node clickable" onclick="openArea('blanca')" title="Ver detalle: Área Blanca">
+                                <div class="node-marker blanca"><i class="fa-solid fa-check-double"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area blanca">Área Blanca</span>
+                                    <h3>Liberación de Carga</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-user"></i> <strong>Responsable:</strong> Supervisor</div>
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Verificar que indicadores químicos/biológicos sean conformes. Autorizar liberación.</div>
+                                        <div class="detail-item"><i class="fa-solid fa-file-contract"></i> <strong>Doc:</strong> Registro de Liberación</div>
+                                    </div>
+                                    <div class="node-alternative critical">
+                                        <i class="fa-solid fa-ban"></i> <strong>Rechazo:</strong> Falla en control -> Cuarentena y reproceso desde Área Gris.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nodo 6: Fin/Loop -->
+                            <div class="flow-node loop-node">
+                                <div class="node-marker end-marker"><i class="fa-solid fa-arrows-spin"></i></div>
+                                <div class="node-content">
+                                    <span class="node-area end-area">Servicios del Hospital</span>
+                                    <h3>Almacenaje (FEFO) y Distribución</h3>
+                                    <div class="node-details">
+                                        <div class="detail-item"><i class="fa-solid fa-list-check"></i> <strong>Tareas:</strong> Priorizar material por vencer (FEFO). Entregar en carros cerrados. Uso en quirófano y posterior retorno como material sucio.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View: Roles y Tareas -->
+                <section id="view-roles" class="view hidden">
+                    <div class="roles-grid">
+                        <div class="role-card">
+                            <div class="role-icon"><i class="fa-solid fa-broom"></i></div>
+                            <h2>Personal de Limpieza</h2>
+                            <div class="role-area-tag sucia">Área Sucia</div>
+                            <ul class="task-list">
+                                <li><i class="fa-regular fa-square-check"></i> Limpieza diaria y entre turnos</li>
+                                <li><i class="fa-regular fa-square-check"></i> Uso estricto de EPP por área</li>
+                                <li><i class="fa-regular fa-square-check"></i> Limpieza terminal programada</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <div class="role-icon"><i class="fa-solid fa-user-nurse"></i></div>
+                            <h2>Técnicos / Enfermeros</h2>
+                            <div class="role-area-tag multi">Área Gris + Blanca</div>
+                            <ul class="task-list">
+                                <li><i class="fa-regular fa-square-check"></i> Inspección y armado de sets</li>
+                                <li><i class="fa-regular fa-square-check"></i> Empaquetado y rotulado</li>
+                                <li><i class="fa-regular fa-square-check"></i> Carga y monitoreo de autoclaves</li>
+                            </ul>
+                        </div>
+                        <div class="role-card">
+                            <div class="role-icon"><i class="fa-solid fa-user-tie"></i></div>
+                            <h2>Supervisor</h2>
+                            <div class="role-area-tag blanca">Área Blanca (Liberación)</div>
+                            <ul class="task-list">
+                                <li><i class="fa-regular fa-square-check"></i> Liberación de cargas estériles</li>
+                                <li><i class="fa-regular fa-square-check"></i> Auditorías y control de calidad</li>
+                                <li><i class="fa-regular fa-square-check"></i> Gestión de indicadores</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- View: Zonas Grises -->
+                <section id="view-zonas-grises" class="view hidden">
+                    <div class="alert-box">
+                        <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                            <h3>Procesos Pendientes de Definición</h3>
+                            <p>Estas son áreas de mejora en la documentación actual que requieren ser aclaradas para un proceso 100% robusto.</p>
+                        </div>
+                    </div>
+                    <div class="gray-zones-list">
+                        <div class="gray-item">
+                            <h4>1. Esterilización por Baja Temperatura</h4>
+                            <p>El POE indica "VER O ELIMINAR" para Plasma y Óxido de Etileno. ¿Se procesa esto localmente o se terceriza?</p>
+                            <div class="gray-proposal"><strong>Propuesta:</strong> Definir si se terceriza o se adquiere equipo. Agregar un nodo en el Flujo Integral para material termo-sensible (endoscopios, instrumental de plástico).</div>
+                        </div>
+                        <div class="gray-item">
+                            <h4>2. Manejo de Derrames Biológicos</h4>
+                            <p>Si ocurre un derrame en Área Gris/Blanca, ¿el personal de limpieza debe tratarlo como Área Sucia de emergencia? Falta protocolo de derrame.</p>
+                            <div class="gray-proposal"><strong>Propuesta:</strong> Tratar como Área Sucia de emergencia. Cada área tiene su color de mopa asignado (amarilla = Gris, blanca = Blanca). Documentar como "Derrame de Emergencia" y escalar al Supervisor de inmediato. Ver los caminos alternativos en Área Gris y Blanca.</div>
+                        </div>
+                        <div class="gray-item">
+                            <h4>3. Trazabilidad Inversa (Recall)</h4>
+                            <p>Si un control biológico es reportado positivo luego de distribuir el material, no hay un procedimiento documentado para recuperar las cajas afectadas.</p>
+                            <div class="gray-proposal"><strong>Propuesta:</strong> Crear procedimiento de Recall: identificar el número de lote afectado, listar los servicios receptores, retirar el material y documentar con un "Formulario de Retiro de Carga". El material retirado reinicia el flujo desde Área Sucia.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Detalle Dinámico de Área -->
+                <div id="area-details" class="details-panel hidden">
+                    <div class="details-header">
+                        <h2 id="detail-title">Título Área</h2>
+                        <button class="close-btn" onclick="closeArea()"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="details-body" id="detail-content">
+                        <!-- El contenido dinámico se inyectará aquí vía JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
