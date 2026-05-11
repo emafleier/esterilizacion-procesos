@@ -615,6 +615,32 @@ header p {
     color: #d8b4fe;
 }
 
+/* Task list inside flow nodes */
+.node-task-list {
+    list-style: none;
+    margin-top: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-left: 0;
+}
+
+.node-task-list li {
+    padding-left: 1rem;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.node-task-list li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
 /* Details panel spacing when outside view sections */
 .details-panel {
     margin-top: 2rem;
