@@ -24,8 +24,6 @@
             <ul class="nav-links">
                 <li class="active" data-view="mapa"><i class="fa-solid fa-map-location-dot"></i> Mapa de Procesos</li>
                 <li data-view="flujo-completo"><i class="fa-solid fa-route"></i> Flujo Integral</li>
-                <li data-view="roles"><i class="fa-solid fa-users"></i> Roles y Tareas</li>
-                <li data-view="zonas-grises"><i class="fa-solid fa-circle-question"></i> Zonas Grises</li>
             </ul>
 
             <div class="edit-toolbar">
@@ -326,69 +324,6 @@
                     </div>
                 </section>
 
-                <!-- View: Roles y Tareas -->
-                <section id="view-roles" class="view hidden">
-                    <div class="roles-grid">
-                        <div class="role-card">
-                            <div class="role-icon"><i class="fa-solid fa-broom"></i></div>
-                            <h2>Personal de Limpieza</h2>
-                            <div class="role-area-tag sucia">Área Sucia</div>
-                            <ul class="task-list">
-                                <li><i class="fa-regular fa-square-check"></i> Limpieza diaria y entre turnos</li>
-                                <li><i class="fa-regular fa-square-check"></i> Uso estricto de EPP por área</li>
-                                <li><i class="fa-regular fa-square-check"></i> Limpieza terminal programada</li>
-                            </ul>
-                        </div>
-                        <div class="role-card">
-                            <div class="role-icon"><i class="fa-solid fa-user-nurse"></i></div>
-                            <h2>Técnicos / Enfermeros</h2>
-                            <div class="role-area-tag multi">Área Gris + Blanca</div>
-                            <ul class="task-list">
-                                <li><i class="fa-regular fa-square-check"></i> Inspección y armado de sets</li>
-                                <li><i class="fa-regular fa-square-check"></i> Empaquetado y rotulado</li>
-                                <li><i class="fa-regular fa-square-check"></i> Carga y monitoreo de autoclaves</li>
-                            </ul>
-                        </div>
-                        <div class="role-card">
-                            <div class="role-icon"><i class="fa-solid fa-user-tie"></i></div>
-                            <h2>Supervisor</h2>
-                            <div class="role-area-tag blanca">Área Blanca (Liberación)</div>
-                            <ul class="task-list">
-                                <li><i class="fa-regular fa-square-check"></i> Liberación de cargas estériles</li>
-                                <li><i class="fa-regular fa-square-check"></i> Auditorías y control de calidad</li>
-                                <li><i class="fa-regular fa-square-check"></i> Gestión de indicadores</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- View: Zonas Grises -->
-                <section id="view-zonas-grises" class="view hidden">
-                    <div class="alert-box">
-                        <div class="alert-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                        <div>
-                            <h3>Procesos Pendientes de Definición</h3>
-                            <p>Estas son áreas de mejora en la documentación actual que requieren ser aclaradas para un proceso 100% robusto.</p>
-                        </div>
-                    </div>
-                    <div class="gray-zones-list">
-                        <div class="gray-item">
-                            <h4>1. Esterilización por Baja Temperatura</h4>
-                            <p>El POE indica "VER O ELIMINAR" para Plasma y Óxido de Etileno. ¿Se procesa esto localmente o se terceriza?</p>
-                            <div class="gray-proposal"><strong>Propuesta:</strong> Definir si se terceriza o se adquiere equipo. Agregar un nodo en el Flujo Integral para material termo-sensible (endoscopios, instrumental de plástico).</div>
-                        </div>
-                        <div class="gray-item">
-                            <h4>2. Manejo de Derrames Biológicos</h4>
-                            <p>Si ocurre un derrame en Área Gris/Blanca, ¿el personal de limpieza debe tratarlo como Área Sucia de emergencia? Falta protocolo de derrame.</p>
-                            <div class="gray-proposal"><strong>Propuesta:</strong> Tratar como Área Sucia de emergencia. Cada área tiene su color de mopa asignado (amarilla = Gris, blanca = Blanca). Documentar como "Derrame de Emergencia" y escalar al Supervisor de inmediato. Ver los caminos alternativos en Área Gris y Blanca.</div>
-                        </div>
-                        <div class="gray-item">
-                            <h4>3. Trazabilidad Inversa (Recall)</h4>
-                            <p>Si un control biológico es reportado positivo luego de distribuir el material, no hay un procedimiento documentado para recuperar las cajas afectadas.</p>
-                            <div class="gray-proposal"><strong>Propuesta:</strong> Crear procedimiento de Recall: identificar el número de lote afectado, listar los servicios receptores, retirar el material y documentar con un "Formulario de Retiro de Carga". El material retirado reinicia el flujo desde Área Sucia.</div>
-                        </div>
-                    </div>
-                </section>
 
                 <!-- Detalle Dinámico de Área -->
                 <div id="area-details" class="details-panel hidden">
